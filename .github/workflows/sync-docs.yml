@@ -30,23 +30,28 @@ jobs:
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
 
-          # Load key from GitHub secret
           creds_dict = json.loads(os.environ['GOOGLE_CREDENTIALS'])
           creds = service_account.Credentials.from_service_account_info(
               creds_dict, 
-              scopes=['https://www.googleapis.com/auth/drive.readonly']
+              scopes=['https://googleapis.com']
           )
 
-          # Call Drive API to export the Doc to plain text/markdown style
-          drive_service = build('drive', 'v3', credentials=creds)
+          # Using the official Google Docs API service layout
+          docs_service = build('docs', 'v1', credentials=creds)
           doc_id = '19A5uMQJFWCDRn5P3wa6evmSMFsshQ3ulJngmkYpleGo'
           
-          # Request text conversion
-          request = drive_service.files().export_media(fileId=doc_id, mimeType='text/plain')
-          content = request.execute()
-
-          with open('final-project-draft.md', 'wb') as f:
-              f.write(content)
+          doc = docs_service.documents().get(documentId=doc_id).execute()
+          
+          # Clean structural loop to pull out regular paragraph text elements
+          text_content = []
+          for element in doc.get('body').get('content'):
+              if 'paragraph' in element:
+                  for run in element.get('paragraph').get('elements'):
+                      if 'textRun' in run:
+                          text_content.append(run.get('textRun').get('content'))
+                          
+          with open('final-project-draft.md', 'w', encoding='utf-8') as f:
+              f.write("".join(text_content))
           EOF
           python fetch_doc.py
 
