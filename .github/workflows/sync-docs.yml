@@ -17,12 +17,31 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install gdown
-        run: pip install gdown
-
-      - name: Download Google Doc Cleanly
+      - name: Download Google Doc Text Directly
         run: |
-          gdown --format txt "https://docs.google.com/document/d/19A5uMQJFWCDRn5P3wa6evmSMFsshQ3uIJngmkYpIeGc/edit?tab=t.0" -O final-project-draft.md
+          cat << 'EOF' > download_doc.py
+          import urllib.request
+
+          # Using your exact URL ending in Gc
+          url = "https://google.com"
+          
+          req = urllib.request.Request(
+              url, 
+              headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+          )
+          
+          try:
+              with urllib.request.urlopen(req) as response:
+                  text_data = response.read().decode('utf-8')
+              
+              with open('final-project-draft.md', 'w', encoding='utf-8') as f:
+                  f.write(text_data)
+              print("Download successful!")
+          except Exception as e:
+              print(f"Error downloading file: {e}")
+              exit(1)
+          EOF
+          python download_doc.py
 
       - name: Commit and Push Changes
         run: |
