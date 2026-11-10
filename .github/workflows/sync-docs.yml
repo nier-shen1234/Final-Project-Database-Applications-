@@ -12,9 +12,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Download Google Doc Text Directly
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install gdown
+        run: pip install gdown
+
+      - name: Download Google Doc Cleanly
         run: |
-          curl -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" "https://google.com" -o final-project-draft.md
+          gdown --format txt "https://google.com" -o final-project-draft.md
 
       - name: Commit and Push Changes
         run: |
