@@ -12,13 +12,43 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Fetch Google Doc
-        uses: maximolee/google-docs-to-markdown@v1
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          documentId: '19A5uMQJFWCDRn5P3wa6evmSMFsshQ3ulJngmkYpleGo'
-          output: 'final-project-draft.md'
+          python-version: '3.10'
+
+      - name: Install Google Dependencies
+        run: pip install google-auth google-api-python-client
+
+      - name: Download Google Doc as Markdown
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          cat << 'EOF' > fetch_doc.py
+          import os
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+
+          # Load key from GitHub secret
+          creds_dict = json.loads(os.environ['GOOGLE_CREDENTIALS'])
+          creds = service_account.Credentials.from_service_account_info(
+              creds_dict, 
+              scopes=['https://www.googleapis.com/auth/drive.readonly']
+          )
+
+          # Call Drive API to export the Doc to plain text/markdown style
+          drive_service = build('drive', 'v3', credentials=creds)
+          doc_id = '19A5uMQJFWCDRn5P3wa6evmSMFsshQ3ulJngmkYpleGo'
+          
+          # Request text conversion
+          request = drive_service.files().export_media(fileId=doc_id, mimeType='text/plain')
+          content = request.execute()
+
+          with open('final-project-draft.md', 'wb') as f:
+              f.write(content)
+          EOF
+          python fetch_doc.py
 
       - name: Commit and Push Changes
         run: |
