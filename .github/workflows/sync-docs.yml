@@ -22,7 +22,7 @@ jobs:
 
       - name: Download Google Doc Cleanly
         run: |
-          gdown --format txt "https://google.com" -o final-project-draft.md
+          gdown --format txt "https://google.com" -O final-project-draft.md
 
       - name: Commit and Push Changes
         run: |
