@@ -12,48 +12,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Google Dependencies
-        run: pip install google-auth google-api-python-client
-
-      - name: Download Google Doc as Markdown
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: Download Google Doc Text Directly
         run: |
-          cat << 'EOF' > fetch_doc.py
-          import os
-          import json
-          from google.oauth2 import service_account
-          from googleapiclient.discovery import build
-
-          creds_dict = json.loads(os.environ['GOOGLE_CREDENTIALS'])
-          creds = service_account.Credentials.from_service_account_info(
-              creds_dict, 
-              scopes=['https://googleapis.com']
-          )
-
-          # Using the official Google Docs API service layout
-          docs_service = build('docs', 'v1', credentials=creds)
-          doc_id = '19A5uMQJFWCDRn5P3wa6evmSMFsshQ3ulJngmkYpleGo'
-          
-          doc = docs_service.documents().get(documentId=doc_id).execute()
-          
-          # Clean structural loop to pull out regular paragraph text elements
-          text_content = []
-          for element in doc.get('body').get('content'):
-              if 'paragraph' in element:
-                  for run in element.get('paragraph').get('elements'):
-                      if 'textRun' in run:
-                          text_content.append(run.get('textRun').get('content'))
-                          
-          with open('final-project-draft.md', 'w', encoding='utf-8') as f:
-              f.write("".join(text_content))
-          EOF
-          python fetch_doc.py
+          curl -L "https://google.com" -o final-project-draft.md
 
       - name: Commit and Push Changes
         run: |
