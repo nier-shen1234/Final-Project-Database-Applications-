@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Database Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to My Recipe Database!</h1>
+    <h2>Featured Recipes (From Kaggle Dataset):</h2>
+    
+    <ul>
+        {% for recipe in recipes %}
+            <li><strong>{{ recipe['Title']}}</strong></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
