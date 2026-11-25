@@ -12,7 +12,7 @@
     <ul>
         {% for recipe in recipes %}
             <li>
-                <a href="{{ url_for('recipe_detail', recipe_id=recipe['id']) }}">
+                <a href="{{ url_for('recipe_detail', recipe_id=recipe['RecipeID']) }}">
                     <strong>{{ recipe['Title'] }}</strong>
                 </a>
             </li>
