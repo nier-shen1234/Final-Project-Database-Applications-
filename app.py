@@ -15,5 +15,12 @@ def home():
     conn.close()
     return render_template("index.html", recipes=recipes)
 
+@app.route("/recipe/<int:recipe_id>")
+def recipe_detail(recipe_id):
+    conn = get_db_connection()
+    recipe = conn.execute("SELECT * FROM Recipe WHERE id = ?", (recipe_id,)).fetchone()
+    conn.close()
+    return render_template("recipe_detail.html", recipe=recipe)
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ recipe['Title'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; background: #fdfdfd; color: #333;">
+    <a href="{{ url_for('home') }}" style="color: #3498db; text-decoration: none;">&larr; Back to Home</a>
+    
+    <h1 style="color: #d35400; margin-top: 20px;">{{ recipe['Title'] }}</h1>
+    
+    {% if recipe['Description'] %}
+        <p style="font-style: italic; color: #666;">{{ recipe['Description'] }}</p>
+    {% endif %}
+
+    <h3>Ingredients</h3>
+    <p>{{ recipe['RecipeIngredientParts'] }}</p>
+
+    <h3>Instructions</h3>
+    <p>{{ recipe['RecipeInstructions'] }}</p>
+
+    <br>
+    <a href="{{ url_for('home') }}" style="display: inline-block; padding: 10px 15px; background: #3498db; color: white; border-radius: 4px; text-decoration: none;">Back to Recipe List</a>
+</body>
+</html>
