@@ -11,7 +11,7 @@ def get_db_connection():
 @app.route("/")
 def home():
     conn = get_db_connection()
-    recipes = conn.execute("SELECT * FROM Recipe LIMIT 10").fetchall()
+    recipes = conn.execute("SELECT * FROM Recipe").fetchall()
     conn.close()
     return render_template("index.html", recipes=recipes)
 
