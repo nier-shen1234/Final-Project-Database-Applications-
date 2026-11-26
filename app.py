@@ -22,7 +22,8 @@ def recipe_detail(recipe_id):
     recipe = conn.execute("SELECT * FROM Recipe WHERE RecipeID = ?", (recipe_id,)).fetchone()
    
     ingredients = conn.execute("""
-        SELECT i.* FROM Ingredients i
+        SELECT i.IngredientName, ir.Quantity, ir.Unit 
+        FROM Ingredients i
         JOIN Ingredients_Recipe ir ON i.IngredientID = ir.IngredientID
         WHERE ir.RecipeID = ?
     """, (recipe_id,)).fetchall()

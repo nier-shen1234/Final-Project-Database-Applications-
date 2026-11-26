@@ -10,19 +10,17 @@
     
     <h1 style="color: #d35400; margin-top: 20px;">{{ recipe['Title'] }}</h1>
     
-    {% if recipe['Description'] %}
-        <p style="font-style: italic; color: #666;">{{ recipe['Description'] }}</p>
-    {% endif %}
+    <p><strong>Servings:</strong> {{ recipe['Servings'] }} | <strong>Cook Time:</strong> {{ recipe['CookTime'] }}</p>
+
+    <h3>Instructions</h3>
+    <p>{{ recipe['Description'] }}</p>
 
     <h3>Ingredients</h3>
     <ul>
         {% for ing in ingredients %}
-            <li>{{ ing['IngredientName'] }}</li>
+            <li>{{ ing['Quantity'] }} {{ ing['Unit'] }} {{ ing['IngredientName'] }}</li>
         {% endfor %}
     </ul>
-
-    <h3>Instructions</h3>
-    <p>{{ recipe['RecipeInstructions'] }}</p>
 
     <br>
     <a href="{{ url_for('home') }}" style="display: inline-block; padding: 10px 15px; background: #3498db; color: white; border-radius: 4px; text-decoration: none;">Back to Recipe List</a>
