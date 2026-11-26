@@ -15,7 +15,11 @@
     {% endif %}
 
     <h3>Ingredients</h3>
-    <p>{{ recipe['RecipeIngredientParts'] }}</p>
+    <ul>
+        {% for ing in ingredients %}
+            <li>{{ ing['IngredientName'] }}</li>
+        {% endfor %}
+    </ul>
 
     <h3>Instructions</h3>
     <p>{{ recipe['RecipeInstructions'] }}</p>
