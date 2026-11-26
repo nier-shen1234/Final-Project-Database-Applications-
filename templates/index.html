@@ -6,6 +6,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div style="float: right; margin: 10px;">
+        {% if session.get('username') %}
+            <span>Welcome, <strong>{{ session['username'] }}</strong>!</span> | 
+            <a href="{{ url_for('logout') }}">Log Out</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Log In</a> | 
+            <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </div>
+    
     <h1>Welcome to The Recipe Database!</h1>
     <h2>Featured Recipes (From Kaggle Dataset):</h2>
     
